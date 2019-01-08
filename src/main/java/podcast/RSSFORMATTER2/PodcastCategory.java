@@ -41,7 +41,7 @@ public class PodcastCategory {
 		instruction=new JTextField();
 		instruction.setText("Select up to 3 categories for your Podcast");
 		instruction.setHorizontalAlignment(JTextField.CENTER);
-		panel.add(instruction);
+		panel.add(instruction, BorderLayout.NORTH);
 		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
 		toolBar.add(horizontalStrut_2);
 		
