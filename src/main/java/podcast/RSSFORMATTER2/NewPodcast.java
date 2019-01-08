@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.JComboBox;
 
 @SuppressWarnings("serial")
 public class NewPodcast extends JFrame {
@@ -156,54 +158,14 @@ public class NewPodcast extends JFrame {
 		panel.add(lblCategories);
 		
 		String[] languages = {"English", "Spanish", "French", "Chinese", "Arabic", "Hindi", "Russian", "Japenese"};
-		list = new JList(languages);
-		list.setBounds(600, 147, 100, 60);
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		panel.add(list);
-		
-		pane = new JScrollPane(list);
-		pane.setBounds(600, 147, 100, 60);
-		panel.add(pane);
-		list.addListSelectionListener(new ListSelectionListener() {			
-			public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    List<String> selectedValuesList = list.getSelectedValuesList();
-//                    System.out.println(selectedValuesList.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
-                    languageSelected = selectedValuesList.toString().replaceAll("\\[", "").replaceAll("\\]", "");
-                    
-                    switch (languageSelected) {
-					case "English":
-						languageSelected = "en";
-						break;						
-					case "Spanish":
-						languageSelected = "es";
-						break;
-					case "French":
-						languageSelected = "fr";
-						break;
-					case "Chinese":
-						languageSelected = "zh";
-						break;
-					case "Arabic":
-						languageSelected = "ar";
-						break;
-					case "Hindi":
-						languageSelected = "hi";
-						break;
-					case "Russian":
-						languageSelected = "ru";
-						break;
-					case "Japenese":
-						languageSelected = "ja";
-						break;
-						
-					default:
-						break;
-					}
-                }
-            }
-				
-			});
+		String[] languagesShort = {"en", "es", "fr", "zh" , "ar", "hi", "ru", "ja"};
+		final DefaultComboBoxModel model = new DefaultComboBoxModel(languages);
+		list = new JList(model);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //I added a bunch of stuff around here to make it prettier and to also make it work with the JComboBox as it seems more like an HTML form :D
+		JComboBox comboBox = new JComboBox(model);
+
+		comboBox.setBounds(600, 147, 100, 20);
+		panel.add(comboBox);
 		
 		rdbtnYes = new JRadioButton("Yes");
 		rdbtnYes.setBounds(154, 204, 54, 23);
@@ -256,7 +218,7 @@ public class NewPodcast extends JFrame {
 						else {
 							explicit = "no";
 						}
-						NewEpisodeFormatter.generate(podcastTitle.getText(), languageSelected, author.getText(), email.getText(), subdomain.getText(), explicit);
+						NewEpisodeFormatter.generate(podcastTitle.getText(), languagesShort[comboBox.getSelectedIndex()], author.getText(), email.getText(), subdomain.getText(), explicit);
 					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
