@@ -157,7 +157,7 @@ public class NewPodcast extends JFrame {
 		lblCategories.setBounds(417, 248, 116, 49);
 		panel.add(lblCategories);
 		
-		String[] languages = {"English", "Spanish", "French", "Chinese", "Arabic", "Hindi", "Russian", "Japenese"};
+		String[] languages = {"English", "Spanish", "French", "Chinese", "Arabic", "Hindi", "Russian", "Japanese"};
 		String[] languagesShort = {"en", "es", "fr", "zh" , "ar", "hi", "ru", "ja"};
 		final DefaultComboBoxModel model = new DefaultComboBoxModel(languages);
 		list = new JList(model);
