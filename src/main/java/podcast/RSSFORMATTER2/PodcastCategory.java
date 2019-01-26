@@ -48,7 +48,6 @@ public class PodcastCategory {
 		Component horizontalStrut = Box.createHorizontalStrut(20);
 		toolBar.add(horizontalStrut);
 		
-		
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		frame.pack();
 	}
