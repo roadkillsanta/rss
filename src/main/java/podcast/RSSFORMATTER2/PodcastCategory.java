@@ -6,11 +6,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Box;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionListener;
 
 public class PodcastCategory {
 	public JTextField instruction;
@@ -142,6 +147,15 @@ public class PodcastCategory {
 		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
 		toolBar.add(horizontalStrut_2);
 		
+		JList list = new JList(display);
+	    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	    list.setSelectedIndex(0);
+	    list.addListSelectionListener((ListSelectionListener) this);
+	    list.setVisibleRowCount(77);
+	    JScrollPane listScrollPane = new JScrollPane(list);
+		
+	    panel.add(listScrollPane);
+	    
 		Component horizontalStrut = Box.createHorizontalStrut(20);
 		toolBar.add(horizontalStrut);
 		
