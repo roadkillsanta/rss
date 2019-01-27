@@ -15,6 +15,102 @@ import javax.swing.JToolBar;
 public class PodcastCategory {
 	public JTextField instruction;
 	public PodcastCategory(JFrame frame){
+		String[] arts = {"Design","Fashion &amp; Beauty","Food","Literature","Performing Arts","Visual Arts"};
+		String[] business={"Business News","Careers","Investing","Management &amp; Marketing","Shopping"};
+		//Comedy
+		String[] education={"Educational Technology","Higher Education","K-12","Language Courses","Training"};
+		String[] gamesHobbies={"Automotive","Aviation","Hobbies","Other Games","Video Games"};
+		String[] governmentOrganizations={"Local","National","Non-Profit","Regional"};
+		String[] Health={"Alternative Health","Fitness &amp; Nutrition","Self-Help","Sexuality"};
+		//Kids &amp; Family
+		//Music
+		//News &amp; Politics
+		String[] religionSpirituality={"Buddhism","Christianity","Hinduism","Islam","Judaism","Other","Spirituality"};
+		String[] scienceMedicine={"Medicine","Natural Sciences","Social Sciences"};
+		String[] societyCulture={"History","Personal Journals","Philosophy","Places &amp; Travel"};
+		String[] sportsRecreation={"Amateur","College &amp; High School","Outdoor","Professional"};
+		String[] technology={"Gadgets","Tech News","Podcasting","Software How-To"};
+		//	TV &amp; Film
+		String[] display={
+"Arts",
+"Design",
+"Fashion & Beauty",
+"Food",
+"Literature",
+"Performing Arts",
+"Visual Arts",
+
+"Business",
+"Business News",
+"Careers",
+"Investing",
+"Management & Marketing",
+"Shopping",
+
+"Comedy",
+"Education",
+"Educational Technology",
+"Higher Education",
+"K-12",
+"Language Courses",
+"Training",
+
+"Games & Hobbies",
+"Automotive",
+"Aviation",
+"Hobbies",
+"Other Games",
+"Video Games",
+
+"Government & Organizations",
+"Local",
+"National",
+"Non-Profit",
+"Regional",
+
+"Health",
+"Alternative Health",
+"Fitness & Nutrition",
+"Self-Help",
+"Sexuality",
+
+"Kids & Family",
+"Music",
+"News & Politics",
+"Religion & Spirituality",
+"Buddhism",
+"Christianity",
+"Hinduism",
+"Islam",
+"Judaism",
+"Other",
+"Spirituality",
+
+"Science & Medicine",
+"Medicine",
+"Natural Sciences",
+"Social Sciences",
+
+"Society & Culture",
+"History",
+"Personal Journals",
+"Philosophy",
+"Places & Travel",
+
+"Sports & Recreation",
+"Amateur",
+"College & High School",
+"Outdoor",
+"Professional",
+
+"Technology",
+"Gadgets",
+"Tech News",
+"Podcasting",
+"Software How-To",
+
+"TV & Film"};
+		
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout(0, 0));
 		
@@ -40,6 +136,7 @@ public class PodcastCategory {
 		toolBar.add(btnCancel);
 		instruction=new JTextField();
 		instruction.setText("Select up to 3 categories for your Podcast");
+
 		instruction.setHorizontalAlignment(JTextField.CENTER);
 		panel.add(instruction, BorderLayout.NORTH);
 		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
