@@ -2,8 +2,10 @@ package podcast.RSSFORMATTER2;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
@@ -18,8 +20,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 
 public class PodcastCategory {
-	public JTextField instruction;
-	public PodcastCategory(JFrame frame){
+	public static JTextField instruction;
+	public static void getCategories(JFrame frame){
 		String[] arts = {"Design","Fashion &amp; Beauty","Food","Literature","Performing Arts","Visual Arts"};
 		String[] business={"Business News","Careers","Investing","Management &amp; Marketing","Shopping"};
 		//Comedy
@@ -36,7 +38,7 @@ public class PodcastCategory {
 		String[] sportsRecreation={"Amateur","College &amp; High School","Outdoor","Professional"};
 		String[] technology={"Gadgets","Tech News","Podcasting","Software How-To"};
 		//	TV &amp; Film
-		String[] display={
+		/*String[] display={
 "Arts",
 "Design",
 "Fashion & Beauty",
@@ -44,14 +46,14 @@ public class PodcastCategory {
 "Literature",
 "Performing Arts",
 "Visual Arts",
-
+"\n",
 "Business",
 "Business News",
 "Careers",
 "Investing",
 "Management & Marketing",
 "Shopping",
-
+"\n",
 "Comedy",
 "Education",
 "Educational Technology",
@@ -59,26 +61,26 @@ public class PodcastCategory {
 "K-12",
 "Language Courses",
 "Training",
-
+"\n",
 "Games & Hobbies",
 "Automotive",
 "Aviation",
 "Hobbies",
 "Other Games",
 "Video Games",
-
+"\n",
 "Government & Organizations",
 "Local",
 "National",
 "Non-Profit",
 "Regional",
-
+"\n",
 "Health",
 "Alternative Health",
 "Fitness & Nutrition",
 "Self-Help",
 "Sexuality",
-
+"\n",
 "Kids & Family",
 "Music",
 "News & Politics",
@@ -90,31 +92,31 @@ public class PodcastCategory {
 "Judaism",
 "Other",
 "Spirituality",
-
+"\n",
 "Science & Medicine",
 "Medicine",
 "Natural Sciences",
 "Social Sciences",
-
+"\n",
 "Society & Culture",
 "History",
 "Personal Journals",
 "Philosophy",
 "Places & Travel",
-
+"\n",
 "Sports & Recreation",
 "Amateur",
 "College & High School",
 "Outdoor",
 "Professional",
-
+"\n",
 "Technology",
 "Gadgets",
 "Tech News",
 "Podcasting",
 "Software How-To",
-
-"TV & Film"};
+"\n",
+"TV & Film"};*/
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout(0, 0));
@@ -126,7 +128,11 @@ public class PodcastCategory {
 		Component glue = Box.createGlue();
 		toolBar.add(glue);
 		
-		JButton btnNext = new JButton("Next");
+		JButton btnNext = new JButton("Done");
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		toolBar.add(btnNext);
 		
 		Component horizontalStrut_1 = Box.createHorizontalStrut(20);
@@ -147,11 +153,11 @@ public class PodcastCategory {
 		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
 		toolBar.add(horizontalStrut_2);
 		
-		JList list = new JList(display);
-	    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		@SuppressWarnings("rawtypes")
+		JList list = new JList(null);
+	    list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	    list.setSelectedIndex(0);
-	    list.addListSelectionListener((ListSelectionListener) this);
-	    list.setVisibleRowCount(77);
+	    list.setVisibleRowCount(88);
 	    JScrollPane listScrollPane = new JScrollPane(list);
 		
 	    panel.add(listScrollPane);
@@ -164,7 +170,8 @@ public class PodcastCategory {
 	}
 	public static void main(String args[]) {
 		JFrame frame=new JFrame();
-		new PodcastCategory(frame);
+		frame.setPreferredSize(new Dimension(1280,720));
+		getCategories(frame);
 		frame.setVisible(true);
 	}
 }

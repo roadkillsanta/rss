@@ -1,13 +1,25 @@
 package podcast.RSSFORMATTER2;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
-import javax.swing.DefaultComboBoxModel;
+import javax.imageio.ImageIO;
+import javax.swing.Box;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,10 +28,10 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.JComboBox;
 
 @SuppressWarnings("serial")
 public class NewPodcast extends JFrame {
@@ -29,7 +41,7 @@ public class NewPodcast extends JFrame {
 	private JTextField podcastTitle;
 	private JLabel lblAuthor;
 	private JTextField author;
-	private JTextField description;
+	private JTextField description; // ADD LOGIC TO REMOVE SPECIAL CHARACTERS SUCH AS " ' " and " & ", etc List here: http://xml.silmaril.ie/specials.html
 	private JLabel lblDescription;
 	private JLabel lblEmail;
 	private JTextField email;
@@ -47,6 +59,7 @@ public class NewPodcast extends JFrame {
 	private String languageSelected;
 	private JButton btnGenerate;
 	private String explicit;
+	private String imageName;
 
 	/**
 	 * Launch the application.
@@ -68,7 +81,41 @@ public class NewPodcast extends JFrame {
 	 * Create the frame.
 	 */
 	public NewPodcast() {
-		
+		HashMap<String, String> categories=new HashMap<String, String>();
+		categories.put("Arts","Arts");
+		categories.put("Business","Business");
+		categories.put("Comedy","Comedy");
+		categories.put("Education","Education");
+		categories.put("Games & Hobbies","Games &amp; Hobbies");
+		categories.put("Government & Organizations","Government &amp; Organizations");
+		categories.put("Health","Health");
+		categories.put("Kids & Family","Kids &amp; Family");
+		categories.put("Music","Music");
+		categories.put("News & Politics","News &amp; Politics");
+		categories.put("Religion & Spirituality","Religion &amp; Spirituality");
+		categories.put("Science & Medicine","Science &amp; Medicine");
+		categories.put("Society & Culture","Society &amp; Culture");
+		categories.put("Sports & Recreation","Sports &amp; Recreation");
+		categories.put("Technology","Technology");
+		categories.put("TV & Film","TV &amp; Film");
+		String[] display= {
+				"Arts",
+				"Business",
+				"Comedy",
+				"Education",
+				"Games & Hobbies",
+				"Government & Organizations",
+				"Health",
+				"Kids & Family",
+				"Music",
+				"News & Politics",
+				"Religion & Spirituality",
+				"Science & Medicine",
+				"Society & Culture",
+				"Sports & Recreation",
+				"Technology",
+				"TV & Film",
+		};
 		app = new App();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -131,8 +178,35 @@ public class NewPodcast extends JFrame {
 		
 		lblImage = new JLabel("Drag Podcast Image Here");
 		lblImage.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		lblImage.setBounds(417, 67, 247, 49);
+		lblImage.setBounds(417, 67, 477, 49);
 		panel.add(lblImage);
+		lblImage.setDropTarget(new DropTarget() {
+	        public synchronized void drop(DropTargetDropEvent evt) {
+	            try {
+	                evt.acceptDrop(DnDConstants.ACTION_COPY);
+	                @SuppressWarnings("unchecked")
+					List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+	                BufferedImage bi; // exists for size analysis of image
+	               
+	                for (File file : droppedFiles) { // the for-loop allows for the continual addition of images
+	                    imageName = file.getName();   
+	                    bi = ImageIO.read(file);
+	                    if (bi.getWidth() >= 1400 & bi.getHeight() >= 1400 && bi.getWidth() <= 3000 && bi.getHeight() <= 3000) {
+	                    	// if the image is greater than or equal to 1400x1400 and less than or equal to 3000x3000
+	                    	lblImage.setFont(new Font("Lucida Grande", Font.PLAIN, 20)); // sets font size to 20 in case it was changed by else block
+	    	                lblImage.setText("Image Added"); 
+	    	                btnGenerate.setEnabled(true);
+	                    } // end of if 
+	                    else {
+	                    	lblImage.setFont(new Font("Lucida Grande", Font.PLAIN, 16)); // reduces font size from 20 to 16 for long message
+	                    	lblImage.setText("Your image must be between 1400x1400 and 3000x3000");
+						} // end of else
+	                } // end of for loop
+	            } catch (Exception ex) {
+	                lblImage.setText("That file is not a valid image");
+	            }
+	        }
+	    }); // end of drop target
 		
 		subdomain = new JTextField();
 		subdomain.setFont(new Font("Dialog", Font.PLAIN, 20));
@@ -157,15 +231,55 @@ public class NewPodcast extends JFrame {
 		lblCategories.setBounds(417, 248, 116, 49);
 		panel.add(lblCategories);
 		
-		String[] languages = {"English", "Spanish", "French", "Chinese", "Arabic", "Hindi", "Russian", "Japanese"};
-		String[] languagesShort = {"en", "es", "fr", "zh" , "ar", "hi", "ru", "ja"};
-		final DefaultComboBoxModel model = new DefaultComboBoxModel(languages);
-		list = new JList(model);
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //I added a bunch of stuff around here to make it prettier and to also make it work with the JComboBox as it seems more like an HTML form :D
-		JComboBox comboBox = new JComboBox(model);
-
-		comboBox.setBounds(600, 147, 100, 20);
-		panel.add(comboBox);
+		String[] languages = {"English", "Spanish", "French", "Chinese", "Arabic", "Hindi", "Russian", "Japenese"};
+		list = new JList<String>(languages);
+		list.setBounds(600, 147, 100, 60);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		panel.add(list);
+		
+		pane = new JScrollPane(list);
+		pane.setBounds(600, 147, 100, 60);
+		panel.add(pane);
+		list.addListSelectionListener(new ListSelectionListener() {			
+			public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    List<String> selectedValuesList = list.getSelectedValuesList();
+//                    System.out.println(selectedValuesList.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+                    languageSelected = selectedValuesList.toString().replaceAll("\\[", "").replaceAll("\\]", "");
+                    
+                    switch (languageSelected) {
+					case "English":
+						languageSelected = "en";
+						break;						
+					case "Spanish":
+						languageSelected = "es";
+						break;
+					case "French":
+						languageSelected = "fr";
+						break;
+					case "Chinese":
+						languageSelected = "zh";
+						break;
+					case "Arabic":
+						languageSelected = "ar";
+						break;
+					case "Hindi":
+						languageSelected = "hi";
+						break;
+					case "Russian":
+						languageSelected = "ru";
+						break;
+					case "Japanese":
+						languageSelected = "ja";
+						break;
+						
+					default:
+						break;
+					}
+                }
+            }
+				
+			});
 		
 		rdbtnYes = new JRadioButton("Yes");
 		rdbtnYes.setBounds(154, 204, 54, 23);
@@ -200,26 +314,41 @@ public class NewPodcast extends JFrame {
 				
 			}
 		});
+		JTextField instruction=new JTextField();
+		instruction.setText("Select up to 3 categories for your Podcast");
+
+		instruction.setHorizontalAlignment(JTextField.CENTER);
+		instruction.setBounds(530, 250, 256, 32);
+		panel.add(instruction);
 		
+		JList list = new JList(display);
+	    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	    list.setSelectedIndex(0);
+	    list.setVisibleRowCount(20);
+	    JScrollPane listScrollPane = new JScrollPane(list);
+		listScrollPane.setBounds(560, 300, 200, 256);
+		
+	    panel.add(listScrollPane);
+	    
+	    JList list2=new JList();
+	    list2.setVisibleRowCount(20);
+	    JScrollPane list2ScrollPane=new JScrollPane(list2);
+	    list2ScrollPane.setBounds(600, 300, 200, 256);
+	    
 		btnGenerate = new JButton("Generate");
 		btnGenerate.setBounds(257, 311, 117, 29);
+		btnGenerate.setEnabled(false);
 		panel.add(btnGenerate);
 		btnGenerate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (rdBtnNo.isSelected() == false && rdbtnYes.isSelected() == false) {
-						//DO SOMETHING!
-						System.out.println("SKREET!");
-					}
-					else {
 						if (rdbtnYes.isSelected()) {
 							explicit = "yes";
 						} 
 						else {
 							explicit = "no";
 						}
-						NewEpisodeFormatter.generate(podcastTitle.getText(), languagesShort[comboBox.getSelectedIndex()], author.getText(), email.getText(), subdomain.getText(), explicit);
-					}
+						NewPodcastFormatter.generate(podcastTitle.getText(), languageSelected, author.getText(), email.getText(), subdomain.getText(), explicit, imageName, description.getText(), null);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}

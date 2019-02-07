@@ -8,16 +8,12 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
@@ -33,12 +29,14 @@ public class AddEpisode extends JFrame {
 	private static JTextField summary;
 	private static JLabel lblEpisodeSummary;
 	private static JButton b;
-	private static String filePath;
-	private static JTextArea output;
+	private static String MP3Path;
 	private static JLabel lblTitle;
-	private static JLabel lblFilePath;
-	private static JScrollPane scrollPane;
+	private static JLabel lblMP3Path;
 	private static JButton btnBack;
+	private static JLabel lblXMLPath;
+	private static String XMLPath;
+	private static boolean validMP3;
+	private static boolean validXML; // when both of these are true, the "Generate" button will enable
 
 	public AddEpisode() {
 		app = new App();
@@ -97,43 +95,23 @@ public class AddEpisode extends JFrame {
 		panel.add(lblEpisodeSummary);
 		
 		b = new JButton("Generate");
-		b.setBounds(55, 327, 117, 29);
+		b.setBounds(31, 372, 117, 29);
 		b.setEnabled(false);
 		panel.add(b);
-		
-		btnBack = new JButton("Back");
-		btnBack.setBounds(184, 327, 117, 29);
-		panel.add(btnBack);
-		
-		output = new JTextArea();
-		output.setEditable(false);
-		output.setBounds(6, 367, 476, 183);
-		panel.add(output);
-		
-		lblFilePath = new JLabel("Drag MP3 File Here");
-		lblFilePath.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		lblFilePath.setBounds(6, 250, 890, 49);
-		panel.add(lblFilePath);
-		
-		scrollPane = new JScrollPane(output);
-		scrollPane.setBounds(6, 367, 476, 183);
-		panel.add(scrollPane);
-
-		
 		b.addActionListener(new ActionListener(){  
 		    public void actionPerformed(ActionEvent e){  
 		    	try {
-					AddEpisodeFormatter.exist(output, new File(filePath), AddEpisodeFormatter.fileDuration(new File(filePath)), Long.toString(new File(filePath).length()), title.getText(), episodeN.getText(), seasonN.getText(), summary.getText() );
-				} catch (UnsupportedAudioFileException e1) {
-					lblFilePath.setText("The file type you have added is not supported. Please add a different file and try again.");
-					b.setEnabled(false);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
+					AddEpisodeFormatter.format(new File(MP3Path), AddEpisodeFormatter.fileDuration(new File(MP3Path)), Long.toString(new File(MP3Path).length()), title.getText(), episodeN.getText(), seasonN.getText(), summary.getText(), XMLPath);
+				} catch (Exception e1) { // Prior verification ensures that neither IOException nor AuidoFormatException will be thrown
 					e1.printStackTrace();
 				}
 		           
 		    }  
 		    });
+		
+		btnBack = new JButton("Back");
+		btnBack.setBounds(161, 372, 117, 29);
+		panel.add(btnBack);
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {				
 				app.setLocation(getLocation());
@@ -144,24 +122,70 @@ public class AddEpisode extends JFrame {
 			}
 		});
 		
-		lblFilePath.setDropTarget(new DropTarget() {
+		
+		
+		lblMP3Path = new JLabel("Drag MP3 File Here");
+		lblMP3Path.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		lblMP3Path.setBounds(6, 250, 838, 49);
+		panel.add(lblMP3Path);	
+		lblMP3Path.setDropTarget(new DropTarget() {
 	        public synchronized void drop(DropTargetDropEvent evt) {
 	            try {
 	                evt.acceptDrop(DnDConstants.ACTION_COPY);
 	                @SuppressWarnings("unchecked")
 					List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
 	                for (File file : droppedFiles) {
-	                    filePath = file.getAbsolutePath();   
-	                }
-	                lblFilePath.setText("MP3 Added"); 
-	                b.setEnabled(true);
+	                    MP3Path = file.getAbsolutePath();  
+	                    if (MP3Path.endsWith(".mp3")) { // if the added file is an MP3
+	    	                lblMP3Path.setText("MP3 Added"); // change the label
+	    	                validMP3 = true; // change the boolean to true
+	    	                if (validMP3 = true && validXML == true) { // check if both valid MP3 and XML files have been added
+								b.setEnabled(true); // if so, enable the "Generate" Button
+							} // end of inner if
+						} // end of outer if 
+	                    else { // if not
+	                    	lblMP3Path.setText("Please add an MP3 file"); // prompt the user to and an MP3 file
+	                    	validMP3 = false; // change the boolean
+	                    	b.setEnabled(false); // disable the "Generate" button
+						} // end of else
+	                } // end of for-loop
+	            } catch (Exception ex) {
+	                ex.printStackTrace();
+	            }
+	        }
+	    });
+		
+		lblXMLPath = new JLabel("Drag XML File Here");
+		lblXMLPath.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		lblXMLPath.setBounds(6, 311, 270, 49);
+		panel.add(lblXMLPath);
+		lblXMLPath.setDropTarget(new DropTarget() {
+	        public synchronized void drop(DropTargetDropEvent evt) {
+	            try {
+	                evt.acceptDrop(DnDConstants.ACTION_COPY);
+	                @SuppressWarnings("unchecked")
+					List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+	                for (File file : droppedFiles) {
+	                    XMLPath = file.getAbsolutePath();  
+	                    if (XMLPath.endsWith(".xml")) {
+	    	                lblXMLPath.setText("XML Added"); 
+	    	                validXML = true;
+	    	                if (validMP3 = true && validXML == true) {
+								b.setEnabled(true);
+							} // end of inner if
+						} // end of outer if
+	                    else {
+	                    	lblXMLPath.setText("Please add an XML file");
+	                    	validXML = false;
+	                    	b.setEnabled(false);
+						} // end of else
+	                } // end of for-loop
 	            } catch (Exception ex) {
 	                ex.printStackTrace();
 	            }
 	        }
 	    });
 	}
-
 	}
 
 

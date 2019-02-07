@@ -67,7 +67,7 @@ public class App extends JFrame{
 		bAddEpisode = new JButton("Click to add episode");
 		bAddEpisode.setBounds(167, 209, 193, 148);
 		panel.add(bAddEpisode);
-		bAddEpisode.setFocusable(false); // This fixes the highlighting thing when the program launches, yuo should add an actionlistener on hover
+		bAddEpisode.setFocusable(false); // This fixes the highliting thing when the program launches, yuo should add an actionlistener on hover
 										// to make it true
 										// Note that this will remove the "tabbing" functionality of switching between components.
 		bAddEpisode.addActionListener(new ActionListener() {
