@@ -10,9 +10,13 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -318,7 +322,7 @@ public class NewPodcast extends JFrame {
 		instruction.setText("Select up to 3 categories for your Podcast");
 
 		instruction.setHorizontalAlignment(JTextField.CENTER);
-		instruction.setBounds(530, 250, 256, 32);
+		instruction.setBounds(500, 250, 320, 32);
 		panel.add(instruction);
 		
 		JList list = new JList(display);
@@ -326,35 +330,9 @@ public class NewPodcast extends JFrame {
 	    list.setSelectedIndex(0);
 	    list.setVisibleRowCount(20);
 	    JScrollPane listScrollPane = new JScrollPane(list);
-		listScrollPane.setBounds(560, 300, 200, 256);
+		listScrollPane.setBounds(500, 300, 200, 256);
 		
 	    panel.add(listScrollPane);
-	    
-	    JList list2=new JList();
-	    list2.setVisibleRowCount(20);
-	    JScrollPane list2ScrollPane=new JScrollPane(list2);
-	    list2ScrollPane.setBounds(600, 300, 200, 256);
-	    
-	    MouseListener mouseListener = new MouseAdapter() {
-	        public void mouseClicked(MouseEvent e) {
-	            if (e.getClickCount() == 2) {
-
-
-	               String selectedItem = (String) list.getSelectedValue();
-	               // add selectedItem to your second list.
-	               DefaultListModel model = (DefaultListModel) list2.getModel();
-	               if(model == null)
-	               {
-	                     model = new DefaultListModel();
-	                     list2.setModel(model);
-	               }
-	               model.addElement(selectedItem);
-
-	             }
-	        }
-	    };
-	    list.addMouseListener(mouseListener);
-	    
 		btnGenerate = new JButton("Generate");
 		btnGenerate.setBounds(257, 311, 117, 29);
 		btnGenerate.setEnabled(false);
@@ -368,7 +346,14 @@ public class NewPodcast extends JFrame {
 						else {
 							explicit = "no";
 						}
-						NewPodcastFormatter.generate(podcastTitle.getText(), languageSelected, author.getText(), email.getText(), subdomain.getText(), explicit, imageName, description.getText(), null);
+						ArrayList categori=new ArrayList();
+						int[] selectedIx = list.getSelectedIndices();
+
+					    // Get all the selected items using the indices
+					    for (int i = 0; i < selectedIx.length; i++) {
+					    	categori.add(categories.get(list.getModel().getElementAt(selectedIx[i])));
+					    }
+						NewPodcastFormatter.generate(podcastTitle.getText(), languageSelected, author.getText(), email.getText(), subdomain.getText(), explicit, imageName, description.getText(), categori);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
