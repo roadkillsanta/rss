@@ -335,6 +335,26 @@ public class NewPodcast extends JFrame {
 	    JScrollPane list2ScrollPane=new JScrollPane(list2);
 	    list2ScrollPane.setBounds(600, 300, 200, 256);
 	    
+	    MouseListener mouseListener = new MouseAdapter() {
+	        public void mouseClicked(MouseEvent e) {
+	            if (e.getClickCount() == 2) {
+
+
+	               String selectedItem = (String) list.getSelectedValue();
+	               // add selectedItem to your second list.
+	               DefaultListModel model = (DefaultListModel) list2.getModel();
+	               if(model == null)
+	               {
+	                     model = new DefaultListModel();
+	                     list2.setModel(model);
+	               }
+	               model.addElement(selectedItem);
+
+	             }
+	        }
+	    };
+	    list.addMouseListener(mouseListener);
+	    
 		btnGenerate = new JButton("Generate");
 		btnGenerate.setBounds(257, 311, 117, 29);
 		btnGenerate.setEnabled(false);
