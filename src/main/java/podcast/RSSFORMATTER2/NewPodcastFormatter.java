@@ -1,4 +1,4 @@
-Qpackage podcast.RSSFORMATTER2;
+package podcast.RSSFORMATTER2;
 
 import java.io.File;
 import java.io.FileWriter;

@@ -154,7 +154,7 @@ public class PodcastCategory {
 		toolBar.add(horizontalStrut_2);
 		
 		@SuppressWarnings("rawtypes")
-		JList list = new JList(null);
+		JList list = new JList();
 	    list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	    list.setSelectedIndex(0);
 	    list.setVisibleRowCount(88);
