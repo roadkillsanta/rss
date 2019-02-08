@@ -322,15 +322,15 @@ public class NewPodcast extends JFrame {
 		instruction.setText("Select up to 3 categories for your Podcast");
 
 		instruction.setHorizontalAlignment(JTextField.CENTER);
-		instruction.setBounds(500, 250, 320, 32);
+		instruction.setBounds(530, 250, 320, 32);
 		panel.add(instruction);
 		
 		JList list = new JList(display);
-	    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	    list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 	    list.setSelectedIndex(0);
 	    list.setVisibleRowCount(20);
 	    JScrollPane listScrollPane = new JScrollPane(list);
-		listScrollPane.setBounds(500, 300, 200, 256);
+		listScrollPane.setBounds(530, 300, 200, 256);
 		
 	    panel.add(listScrollPane);
 		btnGenerate = new JButton("Generate");
@@ -348,7 +348,6 @@ public class NewPodcast extends JFrame {
 						}
 						ArrayList categori=new ArrayList();
 						int[] selectedIx = list.getSelectedIndices();
-
 					    // Get all the selected items using the indices
 					    for (int i = 0; i < selectedIx.length; i++) {
 					    	categori.add(categories.get(list.getModel().getElementAt(selectedIx[i])));

@@ -12,10 +12,19 @@ public class NewPodcastFormatter {
 		File f = new File(desktop+"RSS.xml"); //user.home = universal desktop
 		FileWriter fw = new FileWriter(f);
 		String categorySection="";
-		for(int i=0; i<=categories.size(); i++) {
+		if(categories.size()>3) {
+			for(int i=0; i<3; i++) {
 			categorySection=categorySection+"<itunes:category text=\""+categories.get(i)+">\n" +  
 			"</itunes:category>\n";
+			}
 		}
+		else {
+			for(int i=0; i<categories.size(); i++) {
+				categorySection=categorySection+"<itunes:category text=\""+categories.get(i)+">\n" +  
+				"</itunes:category>\n";
+			}
+		}
+		
 		String write="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
 				"<rss version=\"2.0\" xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\" xmlns:content=\"http://purl.org/rss/1.0/modules/content/\">\n" + 
 				"<channel>\n" + 
@@ -31,7 +40,8 @@ public class NewPodcastFormatter {
 				"<itunes:name>"+author+"</itunes:name>\n" + 
 				"<itunes:email>"+email+"</itunes:email>\n" + 
 				"</itunes:owner>\n" + 
-				"<itunes:image href=\"https://"+subdomain+".netlify.com/"+imageName+"\"/>\n"+ categorySection+
+				"<itunes:image href=\"https://"+subdomain+".netlify.com/"+imageName+"\"/>\n"+ 
+				categorySection+
 				"<itunes:explicit>"+explicit+"</itunes:explicit>\n\n" +
 				"<!--Add new episodes here-->\n" +
 				"</channel>\n"+
